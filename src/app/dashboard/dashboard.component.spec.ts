@@ -80,13 +80,50 @@ describe('DashboardComponent', () => {
 
   }));
 
-  // it('should getHero fail', async(() => {
-  //   const e = { error: { code: 'KeyConflict' }};
-  //   getHeroesSpy = heroService.getHeroes.and.returnValue(
-  //     throwError(e)
-  //   );
-  //   component.getHeroes();
-  //   expect(component.error).toBeTruthy();
-  // }));
+  it('should getHero fail - call throguh', async(() => {
+    const e = { error: { code: 'KeyConflict' }};
+    getHeroesSpy = heroService.getHeroes.and.returnValue(
+      throwError(e)
+    );
+    spyOn( component, "setError").and.callThrough();
+    component.getHeroesAsync();
+    fixture.whenStable().then( () => {
+      expect(component.error).toBeTruthy();
+      expect(component.setError).toHaveBeenCalled();
+    })
+
+  }));
+
+  it('should getHero fail - call sub', async(() => {
+    const e = { error: { code: 'KeyConflict' }};
+    getHeroesSpy = heroService.getHeroes.and.returnValue(
+      throwError(e)
+    );
+    spyOn( component, "setError").and.stub();
+    component.getHeroesAsync();
+    fixture.whenStable().then( () => {
+      expect(component.error).toBeFalsy();
+      expect(component.setError).toHaveBeenCalled();
+    })
+
+  }));
+
+  it('should getHero fail - call callfake', async(() => {
+    const e = { error: { code: 'KeyConflict' }};
+    getHeroesSpy = heroService.getHeroes.and.returnValue(
+      throwError(e)
+    );
+    spyOn( component, "setError").and.callFake( () =>{
+      component.error = false;
+      component.heroes = [];
+    });
+    component.error = true;
+    component.getHeroesAsync();
+    fixture.whenStable().then( () => {
+      expect(component.heroes).toEqual([]);
+      // expect(component.setError).toHaveBeenCalled();
+    })
+
+  }));
 
 });
