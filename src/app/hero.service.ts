@@ -13,6 +13,8 @@ const httpOptions = {
 
 @Injectable({ providedIn: 'root' })
 export class HeroService {
+  public error: any;
+
 
   private heroesUrl = 'api/heroes';  // URL to web api
 
@@ -86,7 +88,7 @@ export class HeroService {
   }
 
   /** PUT: update the hero on the server */
-  updateHero (hero: Hero): Observable<any> {
+  updateHero (hero: Hero): Observable<Hero> {
     return this.http.put(this.heroesUrl, hero, httpOptions).pipe(
       tap(_ => this.log(`updated hero id=${hero.id}`)),
       catchError(this.handleError<any>('updateHero'))
@@ -111,6 +113,10 @@ export class HeroService {
       // Let the app keep running by returning an empty result.
       return of(result as T);
     };
+  }
+
+  public testMethod(){
+
   }
 
   /** Log a HeroService message with the MessageService */

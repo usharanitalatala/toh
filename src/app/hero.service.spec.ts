@@ -1,8 +1,9 @@
-import { TestBed, inject } from '@angular/core/testing';
+import { TestBed, inject, fakeAsync, flush } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '../../node_modules/@angular/common/http/testing';
 
 import { HeroService } from './hero.service';
 import { Hero } from './hero';
+import { Http } from '../../node_modules/@angular/http';
 
 // https://angular.io/api/common/http/testing/HttpTestingController
 // https://angular.io/api/common/http/testing/TestRequest
@@ -41,6 +42,7 @@ describe('MessageService', () => {
     httpMock.verify();
   });
 
+  /* waits unitl done is called */
   it('should getHeroes fail', (done) => {
     const hero = {
       id: 2,
@@ -56,4 +58,6 @@ describe('MessageService', () => {
     getHeros.flush({ errorMessage: 'Uh oh!' }, { status: 500, statusText: 'Server Error' });
     httpMock.verify();
   });
+
+
 });
